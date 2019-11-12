@@ -3,6 +3,7 @@ import DisplayRow from './DisplayRow';
 
 var BoardLocation = [];
 var done = 0;
+var iterations = 0
 var IdWithQueen = [];
 const BoardSize = (size) => {
     for(var i=0; i<size; i++){
@@ -28,7 +29,7 @@ class Board extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            board_size: 5,
+            board_size: 8,
             update: false
         }
     }
@@ -55,6 +56,9 @@ class Board extends React.Component{
         }
     }
 
+    handleChange = e => {
+        
+    }
 
 
     render(){
@@ -67,15 +71,21 @@ class Board extends React.Component{
             displayBoard = BoardLocation.map(item => <DisplayRow content={item}/> )
         }
         return(
-            <div className="main-board-container">
-                 {displayBoard}
-                 <button type="button" onClick={this.HandleSimulation}>Simulate</button>
-            </div>
+            <React.Fragment>
+                <div className="form-control">
+                    <form onSubmit={this.handleSubmit}>
+                        <input name="board-size" onChange={this.handleChange}></input>
+                        <button type="submit">Simulate</button>
+                    </form>
+                </div>
+                <p>Total Number of Iterations: {iterations}</p>
+                <div className="main-board-container">
+                    {displayBoard}
+                </div>
+            </React.Fragment>
         )
     }
 }
-
-var iterations = 0
 
 function RenderBoard(columns) {
 
