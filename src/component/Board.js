@@ -3,8 +3,9 @@ import DisplayRow from './DisplayRow';
 
 var BoardLocation = [];
 var iterations = 0
+var done = 0;
 var IdWithQueen = [];
-var new_board_size = 4;
+var new_board_size = 5;
 const BoardSize = (size) => {
     for(var i=0; i<size; i++){
         var arr = [];
@@ -47,26 +48,34 @@ class Board extends React.Component{
         for(var i=0; i<board_size; i++){
             CBoard[i]=new Array(board_size);
         }
-        
-        function PlaceNQueen(n,col){
-            if(col>=n) return true;
+
+        var PlaceNQueens = function PlaceNQueen(n,col){
+            if(col>=n) return 1;
             for(var i=0; i<n; i++){
-                if(isSafe(n,i,col,CBoard)){
+                if(isSafes(n,i,col,CBoard)){
                     CBoard[i][col]=1;
+                    iterations++;
                     if(document.getElementById('_'+i+col)!=null){
-                        document.getElementById('_'+i+col).setAttribute("class","square-box");
-                    }
-                    if(PlaceNQueen(n,col+1)) return true;
-                    CBoard[i][col]=0;
-                    if(document.getElementById('_'+i+col)!=null){
+                        // console.log("Inside");
                         document.getElementById('_'+i+col).setAttribute("class","chess-queen square-box");
+                    }
+                    // console.log("Console: "+PlaceNQueens(n,col+1));
+                    if(PlaceNQueens(n,col+1)===1) return 1;
+                    else {
+                        CBoard[i][col]=0;
+                        if(document.getElementById('_'+i+col)!=null){
+                            // console.log("Inside");
+                            document.getElementById('_'+i+col).setAttribute("class","square-box");
+                        }
                     }
                 }
             }
-            return false;
+            return 0;
         }
-        
-        PlaceNQueen(board_size);
+        if(done === 0){
+            PlaceNQueens(board_size,0);
+            done = 1;
+        }
     }
 
     // UpdateBoard = e => {
@@ -101,7 +110,7 @@ class Board extends React.Component{
         BoardLocation = [];
         iterations = 0;
         e.preventDefault();
-        console.log(this.state.board_size);
+        // console.log(this.state.board_size);
         this.setState({
             board_size:new_board_size,
             IdWithQueen
@@ -110,7 +119,7 @@ class Board extends React.Component{
     }
 
     render(){
-        console.log("Render function called!");
+        // console.log("Render function called!");
         BoardSize(this.state.board_size);
         var displayBoard = null;
         displayBoard = BoardLocation.map(item => <DisplayRow content={item}/> )
@@ -119,7 +128,7 @@ class Board extends React.Component{
             <React.Fragment>
                 <div className="form-group">
                     <form style={{display:"flex"}} onSubmit={this.handleSubmit}>
-                        <input name="board_size" style={{width:"500px"}} className="form-control" onChange={this.handleChange} placeholder="Enter board size and double tap."></input>
+                        <input name="board_size" style={{width:"500px"}} className="form-control" onChange={this.handleChange} placeholder="Enter the Board Size."></input>
                         <button type="submit" style={{marginLeft: "20px", width:"90px"}} className="form-control btn btn-primary">Simulate</button>
                     </form>
                 </div>
@@ -132,12 +141,12 @@ class Board extends React.Component{
     }
 }
 
-function isSafe(n,row,col,CBoard){
+var isSafes = function isSafe(n,row,col,CBoard){
     var i,j;
-    for(i=0; i<col; i++) if(CBoard[row][i]) return false;
-    for(i=row, j=col; j>=0 && i<n; i++,j--) if(CBoard[i][j]) return false;
-    for(i=row,j=col; j>=0&& i<n; i++,j--) if(CBoard[i][j]) return false;
-    return true;
+    for(i=0; i<col; i++) if(CBoard[row][i]) return 0;
+    for(i=row, j=col; j>=0 && i<n; i++,j--) if(CBoard[i][j]) return 0;
+    for(i=row,j=col; j>=0&& i<n; i++,j--) if(CBoard[i][j]) return 0;
+    return 1;
 }
 
 export default Board;
