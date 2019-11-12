@@ -1,0 +1,24 @@
+/* BOARD DECORATION */
+.main-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.main-board-container{
+  display: flex;
+  flex-direction: column;
+}
+.row-container{
+  display: flex;
+  flex-direction: row;
+}
+.square-box{
+  height: 120px;
+  width: 120px;
+  border: 1px solid black;
+}
+
+.chess-queen{
+  background-image: url("https://www.trzcacak.rs/file/max/111/1115243_queen-chess-piece-png.png") ;
+  background-size: contain;
+}
